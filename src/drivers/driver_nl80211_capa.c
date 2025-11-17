@@ -1183,10 +1183,15 @@ static int wiphy_info_handler(struct nl_msg *msg, void *arg)
 
 	if (tb[NL80211_ATTR_WIPHY_SELF_MANAGED_REG])
 		capa->flags |= WPA_DRIVER_FLAGS_SELF_MANAGED_REGULATORY;
+#if defined(CONFIG_DISABLE_MULTI_AKM)
+        capa->max_num_akms = 1;
+#else
 
 	if (tb[NL80211_ATTR_MAX_NUM_AKM_SUITES])
 		capa->max_num_akms =
 			nla_get_u16(tb[NL80211_ATTR_MAX_NUM_AKM_SUITES]);
+
+#endif
 
 	if (tb[NL80211_ATTR_MBSSID_CONFIG])
 		wiphy_info_mbssid(capa, tb[NL80211_ATTR_MBSSID_CONFIG]);
